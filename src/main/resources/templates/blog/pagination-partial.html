@@ -1,0 +1,8 @@
+<nav class="pagination" role="navigation" aria-label="pagination">
+  <a class="pagination-previous"
+     th:href="@{${paginationRootUrl+'&page='+(postsResponse.currentPageNo - 1) }}"
+     th:classappend="${postsResponse.hasPreviousPage()} ? '' : 'is-disabled'">Newer Posts</a>
+  <a href="#" class="pagination-next"
+     th:href="@{${paginationRootUrl+'&page='+(postsResponse.currentPageNo + 1) }}"
+     th:classappend="${postsResponse.hasNextPage()} ? '' : 'is-disabled'">Older Posts</a>
+</nav>

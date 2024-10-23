@@ -1,0 +1,13 @@
+<div class="post-actions">
+  <p class="buttons pt-2">
+    <a class="button"
+       sec:authorize="isAuthenticated()"
+       href="#" th:href="@{/admin/posts/{postId}/edit(postId=${post.id})}"
+       title="Edit Post">
+        <span class="icon">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </span>
+      <span>Edit Post</span>
+    </a>
+  </p>
+</div>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE" th:text="#{app.title}">Bootiful Blog</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" th:href="@{/webjars/bulma/1.0.1/css/bulma.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.5.2/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/styles.css}"/>
+</head>
+
+<body>
+<header>
+  <nav class="navbar is-primary is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" th:href="@{/}">
+              <span class="is-size-3 has-text-weight-bold"
+                    th:text="#{app.title}">Bootiful Blog</span>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+         data-target="navbarMain">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarMain" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+
+            <a class="button is-primary" th:href="@{/login}"
+               sec:authorize="isAnonymous()">
+              Login
+            </a>
+            <a class="button is-primary" href="#" th:href="@{/admin/posts/new}"
+               sec:authorize="hasRole('ROLE_ADMIN')">
+              New Post
+            </a>
+            <a class="button is-primary" th:href="@{/logout}"
+               sec:authorize="isAuthenticated()">
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="wrapper" class="container">
+  <div class="fixed-grid has-12-cols">
+    <div class="grid">
+      <div class="cell is-col-span-12">
+        <div layout:fragment="content">
+          <!-- Your Page Content Here -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+<th:block th:insert="~{footer-partial}"></th:block>
+<script th:src="@{'/webjars/htmx.org/2.0.3/dist/htmx.min.js'}"></script>
+<script th:src="@{'/assets/js/admin.js'}"></script>
+<div layout:fragment="pageLevelScript">
+</div>
+</body>
+</html>

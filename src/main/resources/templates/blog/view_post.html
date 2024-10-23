@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{blog/mainLayout}">
+<head>
+  <title th:text="${post.title}">Post Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <div class="pt-3 pb-1 content">
+    <h2 class="title" th:text="${post.title}">post title</h2>
+    <div class="content pt-1">
+      <div class="pb-1">
+				<span class="pr-1">
+				<i class="fa fa-user"></i> <strong th:text="${post.createdByUserName}">Admin</strong>
+				</span>
+      <span class="pr-1">
+				<i class="fa fa-calendar"></i> <strong
+        th:text="${#temporals.format(post.createdAt,'dd MMMM yyyy')}">Date</strong>
+				</span>
+      </div>
+    <th:block th:insert="~{blog/post-actions-partial}"></th:block>
+    </div>
+    <div class="pt-2 pb-2" th:utext="${post.content}">post content</div>
+  </div>
+  <hr/>
+  <div>
+    <h3 class="is-size-3">Comments:</h3>
+
+    <form class="box " id="commentForm" method="post"
+          th:action="@{/blog/posts/{postSlug}/comments(postSlug=${post.slug})}"
+          th:object="${comment}">
+      <div class="field">
+        <label for="name" class="label">Name</label>
+        <div class="control">
+          <input type="text" class="input" id="name"
+                 placeholder="Enter Name" name="name"
+                 th:field="*{name}"/>
+        </div>
+        <p class="help is-danger"
+           th:if="${#fields.hasErrors('name')}"
+           th:errors="*{name}">Incorrect data</p>
+      </div>
+      <div class="field">
+        <label for="email" class="label">Email</label>
+        <div class="control">
+          <input type="email" class="input" id="email"
+                 placeholder="Enter email" name="email"
+                 th:field="*{email}"/>
+        </div>
+        <p class="help is-danger"
+           th:if="${#fields.hasErrors('email')}"
+           th:errors="*{email}">Incorrect data</p>
+      </div>
+      <div class="field">
+        <label for="content" class="label">Comment</label>
+        <div class="control">
+						<textarea class="textarea" id="content"
+                      placeholder="Enter comment" rows="8" name="content"
+                      th:field="*{content}"></textarea>
+        </div>
+        <p class="help is-danger"
+           th:if="${#fields.hasErrors('content')}"
+           th:errors="*{content}">Incorrect data</p>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary">Submit</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="box" th:if="${comments == null || comments.isEmpty()}">
+      <p class="is-size-2">No comments yet!</p>
+    </div>
+    <div class="box" th:each="comment : ${comments}">
+      <div>
+        <p><b>Name : </b><strong th:text="${comment.name}">name</strong></p>
+        <p><b>Date: </b><span th:text="${#temporals.format(comment.createdAt,'dd MMMM yyyy')}"></span></p>
+        <p class="pt-1" th:utext="${comment.content}">content</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+#wrapper {
+    flex: 1;
+}
+
+footer {
+    padding: 2rem 1rem 2rem !important;
+}
+
+main {
+    padding-top: 70px;
+    padding-bottom: 10px;
+}

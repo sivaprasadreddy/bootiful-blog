@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{blog/mainLayout}">
+<head>
+  <title>Home</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="pt-2 pb-2">
+      <form th:action="@{/blog/posts}">
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" type="text" name="query" placeholder="Search">
+          </div>
+          <div class="control">
+            <button class="button is-primary">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  <div class="fixed-grid has-1-cols">
+    <div class="grid">
+      <div class="cell" th:each="post : ${postsResponse.data}">
+        <div class="card">
+          <div class="card-content">
+            <a class="title pt-1" href="#"
+               th:href="@{/blog/posts/{postSlug}(postSlug=${post.slug})}"
+               th:text="${post.title}">
+              post title
+            </a>
+            <div class="content pt-3">
+              <div class="pb-1">
+                <span class="pr-1">
+                              <i class="fa fa-user"></i> <strong th:text="${post.createdByUserName}">Admin</strong>
+                              </span>
+                <span class="pr-1">
+                              <i class="fa fa-calendar"></i> <strong
+                  th:text="${#temporals.format(post.createdAt,'dd MMMM yyyy')}">Date</strong>
+                              </span>
+
+              </div>
+              <p th:utext="${post.shortDescription}">post shortDescription</p>
+              <th:block th:insert="~{blog/post-actions-partial}"></th:block>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <th:block th:insert="~{blog/pagination-partial}"></th:block>
+</div>
+</body>
+</html>

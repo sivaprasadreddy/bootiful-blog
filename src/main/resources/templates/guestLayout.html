@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE" th:text="#{app.title}">BootifulBlog</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="stylesheet" th:href="@{/webjars/bulma/1.0.1/css/bulma.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.5.2/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/styles.css}"/>
+</head>
+<body>
+<header>
+  <nav class="navbar is-primary is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" th:href="@{/}">
+              <span class="is-size-3 has-text-weight-bold"
+                    th:text="#{app.title}">BootifulBlog</span>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+         data-target="navbarMain">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarMain" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary" th:href="@{/login}"
+               sec:authorize="isAnonymous()">
+              Login
+            </a>
+            <a class="button is-primary" th:href="@{/logout}"
+               sec:authorize="isAuthenticated()">
+              Logout
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<main id="wrapper" class="container">
+  <div>
+
+    <div layout:fragment="content">
+      <!-- Your Page Content Here -->
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="has-text-centered">
+    <p>
+      <a href="https://sivalabs.in">SivaLabs</a> <strong>&copy; 2024</strong>
+    </p>
+  </div>
+</footer>
+<script th:src="@{'/webjars/htmx.org/2.0.3/dist/htmx.min.js'}"></script>
+</body>
+</html>
