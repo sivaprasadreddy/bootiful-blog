@@ -1,4 +1,4 @@
-package com.sivalabs.blog.domain.mappers;
+package com.sivalabs.blog.domain.services;
 
 import com.sivalabs.blog.domain.entities.UserEntity;
 import com.sivalabs.blog.domain.models.User;

@@ -8,7 +8,12 @@ services:
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
-
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
   bootiful-blog:
     image: sivaprasadreddy/bootiful-blog
     container_name: bootiful-blog
@@ -18,6 +23,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://blog-db:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_MAIL_HOST: mailhog
     ports:
       - "18080:8080"
     depends_on:

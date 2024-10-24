@@ -1,11 +1,8 @@
 package com.sivalabs.blog.domain.services;
 
 import com.sivalabs.blog.ApplicationProperties;
-import com.sivalabs.blog.domain.entities.CommentEntity;
 import com.sivalabs.blog.domain.entities.PostEntity;
 import com.sivalabs.blog.domain.exceptions.ResourceNotFoundException;
-import com.sivalabs.blog.domain.mappers.CommentMapper;
-import com.sivalabs.blog.domain.mappers.PostMapper;
 import com.sivalabs.blog.domain.models.Comment;
 import com.sivalabs.blog.domain.models.CreateCommentCmd;
 import com.sivalabs.blog.domain.models.CreatePostCmd;
@@ -15,7 +12,8 @@ import com.sivalabs.blog.domain.models.UpdatePostCmd;
 import com.sivalabs.blog.domain.repositories.CommentRepository;
 import com.sivalabs.blog.domain.repositories.PostRepository;
 import com.sivalabs.blog.domain.repositories.UserRepository;
-import java.time.LocalDateTime;
+import com.sivalabs.blog.events.BlogEventPublisher;
+import com.sivalabs.blog.events.PostPublishedEvent;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -26,79 +24,89 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final PostMapper postMapper;
-    private final CommentMapper commentMapper;
+    private final BlogMapper blogMapper;
+    private final BlogEventPublisher blogEventPublisher;
     private final ApplicationProperties properties;
 
     public PostService(
             PostRepository postRepository,
             CommentRepository commentRepository,
             UserRepository userRepository,
-            PostMapper postMapper,
-            CommentMapper commentMapper,
+            BlogMapper blogMapper,
+            BlogEventPublisher blogEventPublisher,
             ApplicationProperties properties) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
-        this.postMapper = postMapper;
-        this.commentMapper = commentMapper;
+        this.blogMapper = blogMapper;
+        this.blogEventPublisher = blogEventPublisher;
         this.properties = properties;
     }
 
     public PagedResult<Post> findPosts(Integer pageNo) {
         Pageable pageable = this.getPageRequest(pageNo);
-        Page<Post> pagedData = postRepository.findPosts(pageable);
-        return PagedResult.from(pagedData);
+        Page<Post> postsPage = postRepository.findPosts(pageable).map(blogMapper::toPost);
+        return PagedResult.from(postsPage);
     }
 
     public PagedResult<Post> searchPosts(String query, Integer pageNo) {
         Pageable pageable = this.getPageRequest(pageNo);
-        Page<Post> pagedData = postRepository.searchPosts("%" + query.toLowerCase() + "%", pageable);
-        return PagedResult.from(pagedData);
+        Page<Post> postsPage = postRepository
+                .searchPosts("%" + query.toLowerCase() + "%", pageable)
+                .map(blogMapper::toPost);
+        return PagedResult.from(postsPage);
     }
 
     public Optional<Post> findPostBySlug(String slug) {
-        return postRepository.findBySlug(slug).map(postMapper::toPost);
+        return postRepository.findBySlug(slug).map(blogMapper::toPost);
     }
 
     public Optional<Post> findPostById(Long postId) {
-        return postRepository.findById(postId).map(postMapper::toPost);
+        return postRepository.findPostById(postId).map(blogMapper::toPost);
     }
 
+    @Transactional
     public void createPost(CreatePostCmd cmd) {
-        PostEntity entity = new PostEntity();
+        var user = userRepository.getReferenceById(cmd.createdBy());
+
+        var entity = new PostEntity();
         entity.setTitle(cmd.title());
         entity.setSlug(cmd.slug());
         entity.setContent(cmd.content());
-        entity.setCreatedAt(LocalDateTime.now());
-
-        var user = userRepository.getReferenceById(cmd.createdBy());
         entity.setCreatedBy(user);
         postRepository.save(entity);
+
+        var event = new PostPublishedEvent(entity.getTitle(), entity.getSlug(), entity.getContent());
+        blogEventPublisher.publish(event);
     }
 
+    @Transactional
     public void updatePost(UpdatePostCmd cmd) {
-        PostEntity entity = postRepository
+        var entity = postRepository
                 .findById(cmd.id())
                 .orElseThrow(() -> new ResourceNotFoundException("Post with id " + cmd.id() + " not found"));
         entity.setTitle(cmd.title());
         entity.setSlug(cmd.slug());
         entity.setContent(cmd.content());
-        entity.setUpdatedAt(LocalDateTime.now());
         postRepository.save(entity);
+    }
+
+    public boolean isPostSlugExists(String slug) {
+        return postRepository.existsBySlug(slug);
     }
 
     public List<Comment> getCommentsByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
     }
 
+    @Transactional
     public void createComment(CreateCommentCmd cmd) {
-        CommentEntity entity = commentMapper.toCommentEntity(cmd);
+        var entity = blogMapper.toCommentEntity(cmd);
         var post = postRepository.getReferenceById(cmd.postId());
         entity.setPost(post);
         commentRepository.save(entity);
@@ -111,9 +119,5 @@ public class PostService {
             pageNo = 1;
         }
         return PageRequest.of(pageNo - 1, pageSize, sort);
-    }
-
-    public boolean slugExists(String slug) {
-        return postRepository.existsBySlug(slug);
     }
 }

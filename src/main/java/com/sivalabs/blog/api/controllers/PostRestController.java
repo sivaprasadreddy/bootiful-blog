@@ -1,6 +1,7 @@
 package com.sivalabs.blog.api.controllers;
 
 import com.sivalabs.blog.api.models.PostPayload;
+import com.sivalabs.blog.domain.exceptions.BadRequestException;
 import com.sivalabs.blog.domain.exceptions.ResourceNotFoundException;
 import com.sivalabs.blog.domain.models.Comment;
 import com.sivalabs.blog.domain.models.CreateCommentCmd;
@@ -13,6 +14,8 @@ import com.sivalabs.blog.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +38,7 @@ class PostRestController {
         this.postService = postService;
     }
 
-    @GetMapping
+    @GetMapping("")
     PagedResult<Post> searchPosts(
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page) {
@@ -49,7 +52,7 @@ class PostRestController {
     ResponseEntity<Post> getPostBySlug(@PathVariable(value = "slug") String slug) {
         var post = postService
                 .findPostBySlug(slug)
-                .orElseThrow(() -> new ResourceNotFoundException("Post with slug \"" + slug + "\" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         return ResponseEntity.ok(post);
     }
 
@@ -57,7 +60,7 @@ class PostRestController {
     List<Comment> getPostComments(@PathVariable(value = "slug") String slug) {
         Post post = postService
                 .findPostBySlug(slug)
-                .orElseThrow(() -> new ResourceNotFoundException("Post with slug \"" + slug + "\" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         return postService.getCommentsByPostId(post.id());
     }
 
@@ -73,14 +76,13 @@ class PostRestController {
 
     public record CreateCommentPayload(String name, String email, String content) {}
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
     @SecurityRequirement(name = "Bearer")
     ResponseEntity<Void> createPost(@Valid @RequestBody PostPayload postPayload) {
         var loginUserId = SecurityUtils.getCurrentUserIdOrThrow();
         var slug = postPayload.slug();
-        var createPostCmd = new CreatePostCmd(postPayload.title(), slug, postPayload.content(), loginUserId);
-        this.postService.createPost(createPostCmd);
+        var cmd = new CreatePostCmd(postPayload.title(), slug, postPayload.content(), loginUserId);
+        this.postService.createPost(cmd);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .replacePath(null)
                 .path("/api/posts/{slug}")
@@ -96,6 +98,10 @@ class PostRestController {
                 .findPostBySlug(slug)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         var updatedSlug = postPayload.slug();
+        Optional<Post> postBySlug = postService.findPostBySlug(updatedSlug);
+        if (postBySlug.isPresent() && !Objects.equals(postBySlug.get().id(), post.id())) {
+            throw new BadRequestException("Post with slug '" + updatedSlug + "' already exists");
+        }
         var cmd = new UpdatePostCmd(post.id(), postPayload.title(), updatedSlug, postPayload.content());
         this.postService.updatePost(cmd);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{guestLayout}">
+      layout:decorate="~{guest-layout}">
 <head>
   <title>Access Denied</title>
 </head>
@@ -10,7 +10,7 @@
 
 <div layout:fragment="content">
   <h2 class="is-size-2">You are not authorized to access this page</h2>
-  <p class="is-size-4">Click <a href="#" th:href="@{/}">Home</a> to go to Home page</p>
+  <p class="is-size-4">Click <a href="#" th:href="@{/}">Home</a> to go to the Home page</p>
 </div>
 
 </body>

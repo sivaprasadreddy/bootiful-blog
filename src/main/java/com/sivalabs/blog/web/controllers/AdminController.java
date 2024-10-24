@@ -42,7 +42,7 @@ class AdminController {
             return "blog/new-post";
         }
         var slug = postPayload.slug();
-        if (this.postService.slugExists(slug)) {
+        if (this.postService.isPostSlugExists(slug)) {
             model.addAttribute("post", postPayload);
             result.rejectValue("slug", "slug.exists", "Slug already exists");
             return "blog/new-post";

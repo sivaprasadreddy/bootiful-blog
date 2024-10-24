@@ -2,7 +2,6 @@ package com.sivalabs.blog.api.controllers;
 
 import com.sivalabs.blog.api.models.LoginRequest;
 import com.sivalabs.blog.api.models.LoginResponse;
-import com.sivalabs.blog.domain.models.JwtToken;
 import com.sivalabs.blog.domain.services.UserService;
 import com.sivalabs.blog.security.JwtTokenHelper;
 import jakarta.validation.Valid;
@@ -30,9 +29,9 @@ class LoginRestController {
         log.info("Login request for email: {}", req.email());
         var user = userService
                 .login(req.email(), req.password())
-                .orElseThrow(() -> new BadCredentialsException("Bad credentials"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
 
-        JwtToken jwtToken = jwtTokenHelper.generateToken(user);
+        var jwtToken = jwtTokenHelper.generateToken(user);
         return new LoginResponse(
                 jwtToken.token(),
                 jwtToken.expiresAt(),

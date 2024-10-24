@@ -1,4 +1,4 @@
-package com.sivalabs.blog.config;
+package com.sivalabs.blog.api;
 
 import com.sivalabs.blog.domain.exceptions.BadRequestException;
 import com.sivalabs.blog.domain.exceptions.ResourceNotFoundException;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@RestControllerAdvice
-class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice(basePackageClasses = GlobalRestApiExceptionHandler.class)
+class GlobalRestApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<Object> handle(Exception e) {

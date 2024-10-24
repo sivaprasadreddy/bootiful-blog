@@ -4,8 +4,6 @@ import com.sivalabs.blog.ApplicationProperties;
 import com.sivalabs.blog.domain.models.JwtToken;
 import com.sivalabs.blog.domain.models.User;
 import java.time.Instant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -13,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenHelper {
-    private static final Logger log = LoggerFactory.getLogger(JwtTokenHelper.class);
-
     private final JwtEncoder encoder;
     private final ApplicationProperties properties;
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/blog")
+@RequestMapping("/blog/posts")
 class BlogController {
     private final PostService postService;
 
@@ -25,7 +25,7 @@ class BlogController {
         this.postService = postService;
     }
 
-    @GetMapping("/posts")
+    @GetMapping("")
     String viewPosts(
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -40,18 +40,18 @@ class BlogController {
         return "blog/posts";
     }
 
-    @GetMapping("/posts/{slug}")
+    @GetMapping("/{slug}")
     String viewPostBySlug(@PathVariable(value = "slug") String slug, Model model) {
         Post post = postService
                 .findPostBySlug(slug)
-                .orElseThrow(() -> new ResourceNotFoundException("Post with slug \"" + slug + "\" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         model.addAttribute("post", post);
         model.addAttribute("comments", postService.getCommentsByPostId(post.id()));
         model.addAttribute("comment", new CreateCommentPayload("", "", ""));
-        return "blog/view_post";
+        return "blog/view-post";
     }
 
-    @PostMapping("/posts/{slug}/comments")
+    @PostMapping("/{slug}/comments")
     String addComment(
             @PathVariable(value = "slug") String slug,
             @Valid @ModelAttribute("comment") CreateCommentPayload comment,
@@ -59,17 +59,14 @@ class BlogController {
             Model model) {
         Post post = postService
                 .findPostBySlug(slug)
-                .orElseThrow(() -> new ResourceNotFoundException("Post with slug \"" + slug + "\" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         if (result.hasErrors()) {
             model.addAttribute("post", post);
             model.addAttribute("comment", comment);
-            return "blog/view_post";
+            return "blog/view-post";
         }
         var cmd = new CreateCommentCmd(comment.name(), comment.email(), comment.content(), post.id());
         postService.createComment(cmd);
-        // String subject = "A new comment on post :" + post.title();
-        // String content = "Comment :\n" + comment.content();
-        // emailService.send(subject, content);
         return "redirect:/blog/posts/" + post.slug();
     }
 

@@ -1,4 +1,4 @@
-package com.sivalabs.blog.config;
+package com.sivalabs.blog.api;
 
 import java.util.List;
 
