@@ -1,6 +1,5 @@
 package com.sivalabs.blog.web.controllers;
 
-import com.sivalabs.blog.api.models.PostPayload;
 import com.sivalabs.blog.domain.exceptions.ResourceNotFoundException;
 import com.sivalabs.blog.domain.models.CreatePostCmd;
 import com.sivalabs.blog.domain.models.Post;
@@ -8,6 +7,7 @@ import com.sivalabs.blog.domain.models.UpdatePostCmd;
 import com.sivalabs.blog.domain.services.PostService;
 import com.sivalabs.blog.security.SecurityUtils;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Controller;
@@ -88,4 +88,9 @@ class AdminController {
         this.postService.updatePost(cmd);
         return "redirect:/blog/posts/" + slug;
     }
+
+    record PostPayload(
+            @NotEmpty(message = "Title is required") String title,
+            @NotEmpty(message = "Slug is required") String slug,
+            @NotEmpty(message = "Content is required") String content) {}
 }

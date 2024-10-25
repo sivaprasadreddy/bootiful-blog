@@ -1,6 +1,5 @@
 package com.sivalabs.blog.api.controllers;
 
-import com.sivalabs.blog.api.models.PostPayload;
 import com.sivalabs.blog.domain.exceptions.BadRequestException;
 import com.sivalabs.blog.domain.exceptions.ResourceNotFoundException;
 import com.sivalabs.blog.domain.models.Comment;
@@ -13,6 +12,7 @@ import com.sivalabs.blog.domain.services.PostService;
 import com.sivalabs.blog.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -111,4 +111,9 @@ class PostRestController {
                 .toUri();
         return ResponseEntity.status(HttpStatus.OK).location(location).build();
     }
+
+    public record PostPayload(
+            @NotEmpty(message = "Title is required") String title,
+            @NotEmpty(message = "Slug is required") String slug,
+            @NotEmpty(message = "Content is required") String content) {}
 }

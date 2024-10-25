@@ -9,7 +9,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.sivalabs.blog.TestcontainersConfig;
 import com.sivalabs.blog.api.controllers.PostRestController.CreateCommentPayload;
-import com.sivalabs.blog.api.models.PostPayload;
+import com.sivalabs.blog.api.controllers.PostRestController.PostPayload;
 import com.sivalabs.blog.domain.models.Comment;
 import com.sivalabs.blog.domain.models.PagedResult;
 import com.sivalabs.blog.domain.models.Post;

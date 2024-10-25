@@ -5,8 +5,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.HttpStatus.OK;
 
 import com.sivalabs.blog.TestcontainersConfig;
-import com.sivalabs.blog.api.models.LoginRequest;
-import com.sivalabs.blog.api.models.LoginResponse;
+import com.sivalabs.blog.api.controllers.LoginRestController.LoginRequest;
+import com.sivalabs.blog.api.controllers.LoginRestController.LoginResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
