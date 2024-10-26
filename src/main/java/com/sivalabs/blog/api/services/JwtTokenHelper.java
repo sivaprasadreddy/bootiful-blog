@@ -1,7 +1,6 @@
 package com.sivalabs.blog.api.services;
 
 import com.sivalabs.blog.api.config.JwtProperties;
-import com.sivalabs.blog.domain.models.JwtToken;
 import com.sivalabs.blog.domain.models.User;
 import java.time.Instant;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

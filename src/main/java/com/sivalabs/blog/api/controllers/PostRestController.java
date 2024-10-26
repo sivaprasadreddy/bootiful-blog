@@ -39,7 +39,7 @@ class PostRestController {
     }
 
     @GetMapping("")
-    PagedResult<Post> searchPosts(
+    PagedResult<Post> findPosts(
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page) {
         if (query == null || query.trim().isEmpty()) {

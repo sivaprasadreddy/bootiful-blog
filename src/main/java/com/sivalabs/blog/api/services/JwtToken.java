@@ -1,4 +1,4 @@
-package com.sivalabs.blog.domain.models;
+package com.sivalabs.blog.api.services;
 
 import java.time.Instant;
 

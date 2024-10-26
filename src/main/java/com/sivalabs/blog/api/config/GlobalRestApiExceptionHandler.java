@@ -64,7 +64,6 @@ class GlobalRestApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     record ApiErrors(Errors errors) {
-
         public static ApiErrors from(List<String> body) {
             return new ApiErrors(new Errors(body));
         }

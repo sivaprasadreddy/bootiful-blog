@@ -46,7 +46,11 @@ class PostServiceImpl implements PostService {
     @Override
     public PagedResult<Post> findPosts(Integer pageNo) {
         Pageable pageable = this.getPageRequest(pageNo);
-        Page<Post> postsPage = postRepository.findPosts(pageable).map(blogMapper::toPost);
+        Page<Post> postsPage = postRepository
+                .findPosts(pageable)
+                // we could directly return Page<PostProjection>.
+                // Converting to PostProjection to Post for demonstrating MapStruct features
+                .map(blogMapper::toPost);
         return PagedResult.from(postsPage);
     }
 
