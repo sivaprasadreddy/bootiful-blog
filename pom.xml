@@ -22,6 +22,10 @@
         <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
         <org.mapstruct.version>1.6.0</org.mapstruct.version>
         <spotless.version>2.43.0</spotless.version>
+        <bulma.version>1.0.2</bulma.version>
+        <htmx.version>2.0.3</htmx.version>
+        <jquery.version>3.7.1</jquery.version>
+        <font-awesome.version>6.5.2</font-awesome.version>
         <dockerImageName>sivaprasadreddy/${project.artifactId}</dockerImageName>
     </properties>
 
@@ -109,24 +113,29 @@
             <version>3.5.1</version>
         </dependency>
         <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-lite</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>bulma</artifactId>
-            <version>1.0.1</version>
+            <version>${bulma.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>htmx.org</artifactId>
-            <version>2.0.3</version>
+            <version>${htmx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.7.1</version>
+            <version>${jquery.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
-            <version>6.5.2</version>
+            <version>${font-awesome.version}</version>
         </dependency>
 
         <!-- Dev dependencies -->
@@ -206,13 +215,6 @@
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${org.mapstruct.version}</version>
                         </path>
-                        <!--
-                        <path>
-                            <groupId>org.mapstruct.extensions.spring</groupId>
-                            <artifactId>mapstruct-spring-extensions</artifactId>
-                            <version>${org.mapstruct.extensions.spring.version}</version>
-                        </path>
-                        -->
                         <!-- other annotation processors -->
                     </annotationProcessorPaths>
                 </configuration>
