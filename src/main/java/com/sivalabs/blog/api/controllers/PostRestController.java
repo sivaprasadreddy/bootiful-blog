@@ -1,15 +1,15 @@
 package com.sivalabs.blog.api.controllers;
 
-import com.sivalabs.blog.domain.exceptions.BadRequestException;
-import com.sivalabs.blog.domain.exceptions.ResourceNotFoundException;
+import com.sivalabs.blog.api.services.JwtUserContextUtils;
+import com.sivalabs.blog.domain.BadRequestException;
+import com.sivalabs.blog.domain.PostService;
+import com.sivalabs.blog.domain.ResourceNotFoundException;
 import com.sivalabs.blog.domain.models.Comment;
 import com.sivalabs.blog.domain.models.CreateCommentCmd;
 import com.sivalabs.blog.domain.models.CreatePostCmd;
 import com.sivalabs.blog.domain.models.PagedResult;
 import com.sivalabs.blog.domain.models.Post;
 import com.sivalabs.blog.domain.models.UpdatePostCmd;
-import com.sivalabs.blog.domain.services.PostService;
-import com.sivalabs.blog.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -79,7 +79,7 @@ class PostRestController {
     @PostMapping("")
     @SecurityRequirement(name = "Bearer")
     ResponseEntity<Void> createPost(@Valid @RequestBody PostPayload postPayload) {
-        var loginUserId = SecurityUtils.getCurrentUserIdOrThrow();
+        var loginUserId = JwtUserContextUtils.getCurrentUserIdOrThrow();
         var slug = postPayload.slug();
         var cmd = new CreatePostCmd(postPayload.title(), slug, postPayload.content(), loginUserId);
         this.postService.createPost(cmd);

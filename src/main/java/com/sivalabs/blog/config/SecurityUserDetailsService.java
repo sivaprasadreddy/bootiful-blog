@@ -1,7 +1,7 @@
 package com.sivalabs.blog.config;
 
-import com.sivalabs.blog.domain.services.UserService;
-import com.sivalabs.blog.security.SecurityUser;
+import com.sivalabs.blog.domain.UserService;
+import com.sivalabs.blog.domain.models.SecurityUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

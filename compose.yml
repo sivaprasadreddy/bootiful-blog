@@ -25,9 +25,10 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_MAIL_HOST: mailhog
     ports:
-      - "18080:8080"
+      - "8080:8080"
     depends_on:
       - blog-db
+      - mailhog
     restart: unless-stopped
     profiles:
       - app

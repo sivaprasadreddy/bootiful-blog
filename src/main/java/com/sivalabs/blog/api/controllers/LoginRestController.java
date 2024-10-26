@@ -1,7 +1,7 @@
 package com.sivalabs.blog.api.controllers;
 
-import com.sivalabs.blog.domain.services.UserService;
-import com.sivalabs.blog.security.JwtTokenHelper;
+import com.sivalabs.blog.api.services.JwtTokenHelper;
+import com.sivalabs.blog.domain.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
