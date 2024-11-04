@@ -6,6 +6,7 @@ import com.sivalabs.blog.domain.models.CreateCommentCmd;
 import com.sivalabs.blog.domain.models.PagedResult;
 import com.sivalabs.blog.domain.models.Post;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,7 +34,7 @@ class BlogController {
         PagedResult<Post> pagedResult = postService.searchPosts(query, page);
         model.addAttribute("postsResponse", pagedResult);
         String paginationRootUrl = "/blog/posts?";
-        if (!query.isEmpty()) {
+        if (StringUtils.isNotBlank(query)) {
             paginationRootUrl = "/blog/posts?query=" + query;
         }
         model.addAttribute("paginationRootUrl", paginationRootUrl);

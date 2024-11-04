@@ -10,7 +10,11 @@ import com.sivalabs.blog.domain.models.CreatePostCmd;
 import com.sivalabs.blog.domain.models.PagedResult;
 import com.sivalabs.blog.domain.models.Post;
 import com.sivalabs.blog.domain.models.UpdatePostCmd;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
@@ -31,6 +35,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/posts")
+@Tag(name = "Posts API")
 class PostRestController {
     private final PostService postService;
 
@@ -39,6 +44,10 @@ class PostRestController {
     }
 
     @GetMapping("")
+    @Operation(summary = "Find posts by page number, optionally filter by a search query")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Returns posts for the given page number and query filter"),
+    })
     PagedResult<Post> findPosts(
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page) {
@@ -49,6 +58,11 @@ class PostRestController {
     }
 
     @GetMapping("/{slug}")
+    @Operation(summary = "Find post by slug")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Returns post for the given slug"),
+        @ApiResponse(responseCode = "404", description = "Post doesn't exists for the given slug"),
+    })
     ResponseEntity<Post> getPostBySlug(@PathVariable(value = "slug") String slug) {
         var post = postService
                 .findPostBySlug(slug)
@@ -57,6 +71,11 @@ class PostRestController {
     }
 
     @GetMapping("/{slug}/comments")
+    @Operation(summary = "Find post comments by post slug")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Returns post comments for the given slug"),
+        @ApiResponse(responseCode = "404", description = "Post doesn't exists for the given slug"),
+    })
     List<Comment> getPostComments(@PathVariable(value = "slug") String slug) {
         Post post = postService
                 .findPostBySlug(slug)
@@ -66,6 +85,12 @@ class PostRestController {
 
     @PostMapping("/{slug}/comments")
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a new comment")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Comment created successfully"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
+        @ApiResponse(responseCode = "404", description = "Post doesn't exists for the given slug"),
+    })
     void createComment(@PathVariable(value = "slug") String slug, @Valid @RequestBody CreateCommentPayload payload) {
         Post post = postService
                 .findPostBySlug(slug)
@@ -78,6 +103,13 @@ class PostRestController {
 
     @PostMapping("")
     @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Create a new post")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Post created successfully"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+        @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     ResponseEntity<Void> createPost(@Valid @RequestBody PostPayload postPayload) {
         var loginUserId = JwtUserContextUtils.getCurrentUserIdOrThrow();
         var slug = postPayload.slug();
@@ -93,6 +125,13 @@ class PostRestController {
 
     @PutMapping("/{slug}")
     @SecurityRequirement(name = "Bearer")
+    @Operation(summary = "Update an existing post")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Post updated successfully"),
+        @ApiResponse(responseCode = "400", description = "Bad request"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+        @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     ResponseEntity<Void> updatePost(@PathVariable("slug") String slug, @Valid @RequestBody PostPayload postPayload) {
         Post post = postService
                 .findPostBySlug(slug)

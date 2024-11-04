@@ -1,5 +1,6 @@
 package com.sivalabs.blog.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 public record Post(
@@ -11,6 +12,7 @@ public record Post(
         LocalDateTime createdAt,
         LocalDateTime updatedAt) {
 
+    @JsonIgnore
     public String getShortDescription() {
         return content.length() > 200 ? content.substring(0, 200) + "..." : content;
     }

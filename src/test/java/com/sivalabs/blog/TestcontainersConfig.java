@@ -3,7 +3,7 @@ package com.sivalabs.blog;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.DynamicPropertyRegistrar;
+import org.springframework.test.context.DynamicPropertyRegistry;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -25,15 +25,18 @@ public class TestcontainersConfig {
     }
 
     @Bean(name = "mailhog")
-    GenericContainer<?> mailhogContainer() {
+    GenericContainer<?> mailhogContainer(DynamicPropertyRegistry registry) {
+        mailhog.start();
+        registry.add("spring.mail.host", mailhog::getHost);
+        registry.add("spring.mail.port", mailhog::getFirstMappedPort);
         return mailhog;
     }
 
-    @Bean
+    /*@Bean
     DynamicPropertyRegistrar dynamicPropertyRegistrar(GenericContainer<?> mailhog) {
         return (registry) -> {
             registry.add("spring.mail.host", mailhog::getHost);
             registry.add("spring.mail.port", mailhog::getFirstMappedPort);
         };
-    }
+    }*/
 }

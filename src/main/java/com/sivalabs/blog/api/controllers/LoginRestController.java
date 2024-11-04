@@ -2,6 +2,10 @@ package com.sivalabs.blog.api.controllers;
 
 import com.sivalabs.blog.api.services.JwtTokenHelper;
 import com.sivalabs.blog.domain.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Users API")
 class LoginRestController {
     private static final Logger log = LoggerFactory.getLogger(LoginRestController.class);
 
@@ -26,6 +31,11 @@ class LoginRestController {
     }
 
     @PostMapping("/api/login")
+    @Operation(summary = "Authenticate user")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Returns successful authentication response"),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+    })
     LoginResponse login(@RequestBody @Valid LoginRequest req) {
         log.info("Login request for email: {}", req.email());
         var user = userService
