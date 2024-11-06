@@ -1,6 +1,8 @@
 package com.sivalabs.blog.domain.internal;
 
 import com.sivalabs.blog.domain.models.PostProjection;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,12 @@ interface PostRepository extends JpaRepository<PostEntity, Long> {
         where lower(p.title) like ?1 or lower(p.content) like ?1
     """)
     Page<PostProjection> searchPosts(String query, Pageable pageable);
+
+    @Query("""
+        from PostEntity p
+        where p.createdAt >= :start and p.createdAt <= :end
+    """)
+    List<PostProjection> findByCreatedDate(LocalDateTime start, LocalDateTime end);
 
     boolean existsBySlug(String slug);
 }

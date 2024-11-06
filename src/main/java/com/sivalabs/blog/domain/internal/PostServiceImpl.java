@@ -9,6 +9,7 @@ import com.sivalabs.blog.domain.models.CreatePostCmd;
 import com.sivalabs.blog.domain.models.PagedResult;
 import com.sivalabs.blog.domain.models.Post;
 import com.sivalabs.blog.domain.models.UpdatePostCmd;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -61,6 +62,13 @@ class PostServiceImpl implements PostService {
                 .searchPosts("%" + query.toLowerCase() + "%", pageable)
                 .map(blogMapper::toPost);
         return PagedResult.from(postsPage);
+    }
+
+    @Override
+    public List<Post> findPostsCreatedBetween(LocalDateTime start, LocalDateTime end) {
+        return postRepository.findByCreatedDate(start, end).stream()
+                .map(blogMapper::toPost)
+                .toList();
     }
 
     @Override

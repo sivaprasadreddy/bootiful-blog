@@ -6,6 +6,7 @@ import com.sivalabs.blog.domain.models.CreatePostCmd;
 import com.sivalabs.blog.domain.models.PagedResult;
 import com.sivalabs.blog.domain.models.Post;
 import com.sivalabs.blog.domain.models.UpdatePostCmd;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ public interface PostService {
     PagedResult<Post> findPosts(Integer pageNo);
 
     PagedResult<Post> searchPosts(String query, Integer pageNo);
+
+    List<Post> findPostsCreatedBetween(LocalDateTime start, LocalDateTime end);
 
     Optional<Post> findPostBySlug(String slug);
 

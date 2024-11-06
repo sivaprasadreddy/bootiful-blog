@@ -6,4 +6,5 @@ import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "blog")
 @Validated
-public record ApplicationProperties(String supportEmail, @DefaultValue("10") int postsPerPage) {}
+public record ApplicationProperties(
+        String supportEmail, String newsletterJobCron, @DefaultValue("10") int postsPerPage) {}

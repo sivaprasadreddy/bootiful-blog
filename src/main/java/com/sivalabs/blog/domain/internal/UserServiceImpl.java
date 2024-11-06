@@ -2,6 +2,7 @@ package com.sivalabs.blog.domain.internal;
 
 import com.sivalabs.blog.domain.UserService;
 import com.sivalabs.blog.domain.models.User;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,11 @@ class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll().stream().map(userMapper::toUser).toList();
     }
 
     @Override
