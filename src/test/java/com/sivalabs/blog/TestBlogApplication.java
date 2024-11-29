@@ -7,7 +7,7 @@ public class TestBlogApplication {
     public static void main(String[] args) {
         System.setProperty("spring.docker.compose.enabled", "false");
         SpringApplication.from(BlogApplication::main)
-                .with(TestcontainersConfig.class)
+                .with(TestcontainersConfiguration.class)
                 .run(args);
     }
 }

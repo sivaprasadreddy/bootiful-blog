@@ -1,6 +1,6 @@
 package com.sivalabs.blog.domain.internal;
 
-import com.sivalabs.blog.domain.models.Comment;
+import com.sivalabs.blog.domain.Comment;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

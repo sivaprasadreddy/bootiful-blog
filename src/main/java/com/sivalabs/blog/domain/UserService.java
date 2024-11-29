@@ -1,6 +1,5 @@
 package com.sivalabs.blog.domain;
 
-import com.sivalabs.blog.domain.models.User;
 import java.util.List;
 import java.util.Optional;
 

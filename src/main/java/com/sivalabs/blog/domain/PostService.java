@@ -1,11 +1,5 @@
 package com.sivalabs.blog.domain;
 
-import com.sivalabs.blog.domain.models.Comment;
-import com.sivalabs.blog.domain.models.CreateCommentCmd;
-import com.sivalabs.blog.domain.models.CreatePostCmd;
-import com.sivalabs.blog.domain.models.PagedResult;
-import com.sivalabs.blog.domain.models.Post;
-import com.sivalabs.blog.domain.models.UpdatePostCmd;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

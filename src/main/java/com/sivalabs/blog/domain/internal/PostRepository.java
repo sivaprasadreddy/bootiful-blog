@@ -1,6 +1,6 @@
 package com.sivalabs.blog.domain.internal;
 
-import com.sivalabs.blog.domain.models.PostProjection;
+import com.sivalabs.blog.domain.PostProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

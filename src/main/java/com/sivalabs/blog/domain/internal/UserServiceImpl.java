@@ -1,7 +1,7 @@
 package com.sivalabs.blog.domain.internal;
 
+import com.sivalabs.blog.domain.User;
 import com.sivalabs.blog.domain.UserService;
-import com.sivalabs.blog.domain.models.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;

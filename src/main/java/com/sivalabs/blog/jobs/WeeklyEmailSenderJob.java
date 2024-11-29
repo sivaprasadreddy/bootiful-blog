@@ -1,10 +1,10 @@
 package com.sivalabs.blog.jobs;
 
 import com.sivalabs.blog.domain.EmailService;
+import com.sivalabs.blog.domain.Post;
 import com.sivalabs.blog.domain.PostService;
+import com.sivalabs.blog.domain.User;
 import com.sivalabs.blog.domain.UserService;
-import com.sivalabs.blog.domain.models.Post;
-import com.sivalabs.blog.domain.models.User;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;

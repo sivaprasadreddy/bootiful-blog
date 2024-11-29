@@ -11,7 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@Import(TestcontainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 public abstract class AbstractIT {
 
     // Note: Using RestAssured, TestRestTemplate, etc. to demonstrate how to test using different approaches.

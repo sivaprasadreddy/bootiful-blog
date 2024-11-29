@@ -1,8 +1,8 @@
 package com.sivalabs.blog.domain.internal;
 
-import com.sivalabs.blog.domain.models.CreateCommentCmd;
-import com.sivalabs.blog.domain.models.Post;
-import com.sivalabs.blog.domain.models.PostProjection;
+import com.sivalabs.blog.domain.CreateCommentCmd;
+import com.sivalabs.blog.domain.Post;
+import com.sivalabs.blog.domain.PostProjection;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

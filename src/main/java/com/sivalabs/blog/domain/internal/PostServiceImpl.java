@@ -1,14 +1,14 @@
 package com.sivalabs.blog.domain.internal;
 
 import com.sivalabs.blog.ApplicationProperties;
+import com.sivalabs.blog.domain.Comment;
+import com.sivalabs.blog.domain.CreateCommentCmd;
+import com.sivalabs.blog.domain.CreatePostCmd;
+import com.sivalabs.blog.domain.PagedResult;
+import com.sivalabs.blog.domain.Post;
 import com.sivalabs.blog.domain.PostService;
 import com.sivalabs.blog.domain.ResourceNotFoundException;
-import com.sivalabs.blog.domain.models.Comment;
-import com.sivalabs.blog.domain.models.CreateCommentCmd;
-import com.sivalabs.blog.domain.models.CreatePostCmd;
-import com.sivalabs.blog.domain.models.PagedResult;
-import com.sivalabs.blog.domain.models.Post;
-import com.sivalabs.blog.domain.models.UpdatePostCmd;
+import com.sivalabs.blog.domain.UpdatePostCmd;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

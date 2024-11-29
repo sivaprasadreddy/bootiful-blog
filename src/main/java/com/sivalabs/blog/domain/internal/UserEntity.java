@@ -1,6 +1,6 @@
 package com.sivalabs.blog.domain.internal;
 
-import com.sivalabs.blog.domain.models.Role;
+import com.sivalabs.blog.domain.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
