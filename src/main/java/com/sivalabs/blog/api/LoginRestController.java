@@ -1,6 +1,7 @@
 package com.sivalabs.blog.api;
 
 import com.sivalabs.blog.domain.UserService;
+import com.sivalabs.blog.mappers.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,10 +24,12 @@ class LoginRestController {
 
     private final UserService userService;
     private final JwtTokenHelper jwtTokenHelper;
+    private final UserMapper userMapper;
 
-    LoginRestController(UserService userService, JwtTokenHelper jwtTokenHelper) {
+    LoginRestController(UserService userService, JwtTokenHelper jwtTokenHelper, UserMapper userMapper) {
         this.userService = userService;
         this.jwtTokenHelper = jwtTokenHelper;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/api/login")
@@ -39,6 +42,7 @@ class LoginRestController {
         log.info("Login request for email: {}", req.email());
         var user = userService
                 .login(req.email(), req.password())
+                .map(userMapper::toUser)
                 .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
 
         var jwtToken = jwtTokenHelper.generateToken(user);

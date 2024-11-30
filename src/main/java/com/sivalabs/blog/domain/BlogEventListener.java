@@ -1,6 +1,5 @@
-package com.sivalabs.blog.domain.internal;
+package com.sivalabs.blog.domain;
 
-import com.sivalabs.blog.domain.EmailService;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 

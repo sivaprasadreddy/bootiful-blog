@@ -1,10 +1,6 @@
 package com.sivalabs.blog.jobs;
 
-import com.sivalabs.blog.domain.EmailService;
-import com.sivalabs.blog.domain.Post;
-import com.sivalabs.blog.domain.PostService;
-import com.sivalabs.blog.domain.User;
-import com.sivalabs.blog.domain.UserService;
+import com.sivalabs.blog.domain.*;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -34,14 +30,14 @@ class WeeklyEmailSenderJob {
         log.info("Sending newsletter at {}", Instant.now());
         LocalDateTime end = LocalDateTime.now();
         LocalDateTime startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY).atStartOfDay();
-        List<Post> posts = postService.findPostsCreatedBetween(startOfWeek, end);
+        List<PostProjection> posts = postService.findPostsCreatedBetween(startOfWeek, end);
         if (posts.isEmpty()) {
             log.info("No posts found for this week. Skipping newsletter");
             return;
         }
         String newsLetterContent = createNewsLetterContent(posts);
         List<String> userEmails =
-                userService.findAllUsers().stream().map(User::email).toList();
+                userService.findAllUsers().stream().map(User::getEmail).toList();
         if (userEmails.isEmpty()) {
             log.info("No users found for this week. Skipping newsletter");
             return;
@@ -50,17 +46,17 @@ class WeeklyEmailSenderJob {
         log.info("Sent newsletter at {} to {} users", Instant.now(), userEmails.size());
     }
 
-    private String createNewsLetterContent(List<Post> posts) {
+    private String createNewsLetterContent(List<PostProjection> posts) {
         StringBuilder emailContent = new StringBuilder();
-        for (Post post : posts) {
+        for (PostProjection post : posts) {
             // Externalize base url
-            String postUrl = "http://localhost:8080/blog/posts/" + post.slug();
+            String postUrl = "http://localhost:8080/blog/posts/" + post.getSlug();
             var fragment =
                     """
                     <h2><a href="%s">%s</a></h2>
                     <p>%s</p>
                     """
-                            .formatted(postUrl, post.title(), post.getShortDescription());
+                            .formatted(postUrl, post.getTitle(), post.getContent());
             emailContent.append(fragment);
         }
         return emailContent.toString();

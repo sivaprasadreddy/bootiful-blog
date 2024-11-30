@@ -9,11 +9,11 @@ import static org.springframework.http.HttpStatus.OK;
 import com.sivalabs.blog.AbstractIT;
 import com.sivalabs.blog.api.PostRestController.CreateCommentPayload;
 import com.sivalabs.blog.api.PostRestController.PostPayload;
-import com.sivalabs.blog.domain.Comment;
-import com.sivalabs.blog.domain.PagedResult;
-import com.sivalabs.blog.domain.Post;
 import com.sivalabs.blog.domain.Role;
-import com.sivalabs.blog.domain.User;
+import com.sivalabs.blog.dtos.CommentDto;
+import com.sivalabs.blog.dtos.PagedResult;
+import com.sivalabs.blog.dtos.PostDto;
+import com.sivalabs.blog.dtos.UserDto;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -33,10 +33,10 @@ class PostRestControllerTests extends AbstractIT {
 
     @Test
     void shouldGetPosts() {
-        ResponseEntity<PagedResult<Post>> response =
+        ResponseEntity<PagedResult<PostDto>> response =
                 restTemplate.exchange("/api/posts", GET, null, new ParameterizedTypeReference<>() {});
         assertThat(response.getStatusCode()).isEqualTo(OK);
-        PagedResult<Post> pagedResult = Objects.requireNonNull(response.getBody());
+        PagedResult<PostDto> pagedResult = Objects.requireNonNull(response.getBody());
         assertThat(pagedResult.data()).hasSize(5);
         assertThat(pagedResult.currentPageNo()).isEqualTo(1);
         assertThat(pagedResult.totalPages()).isEqualTo(2);
@@ -47,7 +47,7 @@ class PostRestControllerTests extends AbstractIT {
 
     @Test
     void shouldSearchPosts() {
-        ResponseEntity<PagedResult<Post>> response =
+        ResponseEntity<PagedResult<PostDto>> response =
                 restTemplate.exchange("/api/posts?query=spring", GET, null, new ParameterizedTypeReference<>() {});
         assertThat(response.getStatusCode()).isEqualTo(OK);
         assertThat(Objects.requireNonNull(response.getBody()).data()).hasSize(4);
@@ -55,26 +55,26 @@ class PostRestControllerTests extends AbstractIT {
 
     @Test
     void shouldGetPostBySlug() {
-        ResponseEntity<Post> response =
-                restTemplate.getForEntity("/api/posts/{slug}", Post.class, "introducing-springboot");
+        ResponseEntity<PostDto> response =
+                restTemplate.getForEntity("/api/posts/{slug}", PostDto.class, "introducing-springboot");
         assertThat(response.getStatusCode()).isEqualTo(OK);
-        Post post = response.getBody();
-        assertThat(post.id()).isEqualTo(2);
-        assertThat(post.title()).isEqualTo("SpringBoot: Introducing SpringBoot");
-        assertThat(post.slug()).isEqualTo("introducing-springboot");
+        PostDto postDto = response.getBody();
+        assertThat(postDto.id()).isEqualTo(2);
+        assertThat(postDto.title()).isEqualTo("SpringBoot: Introducing SpringBoot");
+        assertThat(postDto.slug()).isEqualTo("introducing-springboot");
     }
 
     @Test
     void shouldGetPostComments() {
-        ResponseEntity<List<Comment>> response = restTemplate.exchange(
+        ResponseEntity<List<CommentDto>> response = restTemplate.exchange(
                 "/api/posts/{slug}/comments",
                 GET,
                 null,
                 new ParameterizedTypeReference<>() {},
                 "introducing-springboot");
         assertThat(response.getStatusCode()).isEqualTo(OK);
-        List<Comment> comments = response.getBody();
-        assertThat(comments).hasSize(2);
+        List<CommentDto> commentDtos = response.getBody();
+        assertThat(commentDtos).hasSize(2);
     }
 
     @Test
@@ -89,8 +89,8 @@ class PostRestControllerTests extends AbstractIT {
     void shouldCreatePostSuccessfully() {
         var payload = getSamplePostPayload();
         HttpHeaders headers = new HttpHeaders();
-        User user = new User(2L, "Siva", "siva@gmail.com", "", Role.ROLE_USER);
-        String token = jwtTokenHelper.generateToken(user).token();
+        UserDto userDto = new UserDto(2L, "Siva", "siva@gmail.com", "", Role.ROLE_USER);
+        String token = jwtTokenHelper.generateToken(userDto).token();
         headers.add("Authorization", "Bearer " + token);
         headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<?> httpEntity = new HttpEntity<>(payload, headers);
@@ -113,8 +113,8 @@ class PostRestControllerTests extends AbstractIT {
             }
             """;
         HttpHeaders headers = new HttpHeaders();
-        User user = new User(2L, "Siva", "siva@gmail.com", "", Role.ROLE_USER);
-        String token = jwtTokenHelper.generateToken(user).token();
+        UserDto userDto = new UserDto(2L, "Siva", "siva@gmail.com", "", Role.ROLE_USER);
+        String token = jwtTokenHelper.generateToken(userDto).token();
         headers.add("Authorization", "Bearer " + token);
         headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<?> httpEntity = new HttpEntity<>(payload, headers);

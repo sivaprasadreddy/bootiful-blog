@@ -1,14 +1,10 @@
 package com.sivalabs.blog.api;
 
-import com.sivalabs.blog.domain.BadRequestException;
-import com.sivalabs.blog.domain.Comment;
-import com.sivalabs.blog.domain.CreateCommentCmd;
-import com.sivalabs.blog.domain.CreatePostCmd;
-import com.sivalabs.blog.domain.PagedResult;
-import com.sivalabs.blog.domain.Post;
-import com.sivalabs.blog.domain.PostService;
-import com.sivalabs.blog.domain.ResourceNotFoundException;
-import com.sivalabs.blog.domain.UpdatePostCmd;
+import com.sivalabs.blog.domain.*;
+import com.sivalabs.blog.dtos.CommentDto;
+import com.sivalabs.blog.dtos.PagedResult;
+import com.sivalabs.blog.dtos.PostDto;
+import com.sivalabs.blog.mappers.BlogMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,6 +15,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,9 +34,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Tag(name = "Posts API")
 class PostRestController {
     private final PostService postService;
+    private final BlogMapper blogMapper;
 
-    PostRestController(PostService postService) {
+    PostRestController(PostService postService, BlogMapper blogMapper) {
         this.postService = postService;
+        this.blogMapper = blogMapper;
     }
 
     @GetMapping("")
@@ -47,13 +46,15 @@ class PostRestController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Returns posts for the given page number and query filter"),
     })
-    PagedResult<Post> findPosts(
+    PagedResult<PostDto> findPosts(
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page) {
         if (query == null || query.trim().isEmpty()) {
-            return postService.findPosts(page);
+            Page<PostDto> posts = postService.findPosts(page).map(blogMapper::toPostDto);
+            return PagedResult.from(posts);
         }
-        return postService.searchPosts(query, page);
+        Page<PostDto> posts = postService.searchPosts(query, page).map(blogMapper::toPostDto);
+        return PagedResult.from(posts);
     }
 
     @GetMapping("/{slug}")
@@ -62,9 +63,10 @@ class PostRestController {
         @ApiResponse(responseCode = "200", description = "Returns post for the given slug"),
         @ApiResponse(responseCode = "404", description = "Post doesn't exists for the given slug"),
     })
-    ResponseEntity<Post> getPostBySlug(@PathVariable(value = "slug") String slug) {
+    ResponseEntity<PostDto> getPostBySlug(@PathVariable(value = "slug") String slug) {
         var post = postService
                 .findPostBySlug(slug)
+                .map(blogMapper::toPostDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         return ResponseEntity.ok(post);
     }
@@ -75,11 +77,14 @@ class PostRestController {
         @ApiResponse(responseCode = "200", description = "Returns post comments for the given slug"),
         @ApiResponse(responseCode = "404", description = "Post doesn't exists for the given slug"),
     })
-    List<Comment> getPostComments(@PathVariable(value = "slug") String slug) {
-        Post post = postService
+    List<CommentDto> getPostComments(@PathVariable(value = "slug") String slug) {
+        PostDto postDto = postService
                 .findPostBySlug(slug)
+                .map(blogMapper::toPostDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
-        return postService.getCommentsByPostId(post.id());
+        return postService.getCommentsByPostId(postDto.id()).stream()
+                .map(blogMapper::toCommentDto)
+                .toList();
     }
 
     @PostMapping("/{slug}/comments")
@@ -91,10 +96,11 @@ class PostRestController {
         @ApiResponse(responseCode = "404", description = "Post doesn't exists for the given slug"),
     })
     void createComment(@PathVariable(value = "slug") String slug, @Valid @RequestBody CreateCommentPayload payload) {
-        Post post = postService
+        PostDto postDto = postService
                 .findPostBySlug(slug)
+                .map(blogMapper::toPostDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
-        var createdCommentCmd = new CreateCommentCmd(payload.name, payload.email, payload.content, post.id());
+        var createdCommentCmd = new CreateCommentCmd(payload.name, payload.email, payload.content, postDto.id());
         postService.createComment(createdCommentCmd);
     }
 
@@ -132,15 +138,16 @@ class PostRestController {
         @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     ResponseEntity<Void> updatePost(@PathVariable("slug") String slug, @Valid @RequestBody PostPayload postPayload) {
-        Post post = postService
+        PostDto postDto = postService
                 .findPostBySlug(slug)
+                .map(blogMapper::toPostDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         var updatedSlug = postPayload.slug();
-        Optional<Post> postBySlug = postService.findPostBySlug(updatedSlug);
-        if (postBySlug.isPresent() && !Objects.equals(postBySlug.get().id(), post.id())) {
+        Optional<PostDto> postBySlug = postService.findPostBySlug(updatedSlug).map(blogMapper::toPostDto);
+        if (postBySlug.isPresent() && !Objects.equals(postBySlug.get().id(), postDto.id())) {
             throw new BadRequestException("Post with slug '" + updatedSlug + "' already exists");
         }
-        var cmd = new UpdatePostCmd(post.id(), postPayload.title(), updatedSlug, postPayload.content());
+        var cmd = new UpdatePostCmd(postDto.id(), postPayload.title(), updatedSlug, postPayload.content());
         this.postService.updatePost(cmd);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .replacePath(null)

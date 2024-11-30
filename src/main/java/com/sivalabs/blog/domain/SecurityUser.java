@@ -17,11 +17,11 @@ public class SecurityUser implements UserDetails, Serializable {
     private final String password;
     private final Role role;
 
-    public SecurityUser(User user) {
-        this.id = user.id();
-        this.username = user.email();
-        this.password = user.password();
-        this.role = user.role();
+    public SecurityUser(Long id, String username, String password, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.sivalabs.blog.domain.internal;
+package com.sivalabs.blog.domain;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

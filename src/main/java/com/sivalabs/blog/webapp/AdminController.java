@@ -1,10 +1,11 @@
 package com.sivalabs.blog.webapp;
 
 import com.sivalabs.blog.domain.CreatePostCmd;
-import com.sivalabs.blog.domain.Post;
 import com.sivalabs.blog.domain.PostService;
 import com.sivalabs.blog.domain.ResourceNotFoundException;
 import com.sivalabs.blog.domain.UpdatePostCmd;
+import com.sivalabs.blog.dtos.PostDto;
+import com.sivalabs.blog.mappers.BlogMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.Objects;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 class AdminController {
     private final PostService postService;
+    private final BlogMapper blogMapper;
 
-    AdminController(PostService postService) {
+    AdminController(PostService postService, BlogMapper blogMapper) {
         this.postService = postService;
+        this.blogMapper = blogMapper;
     }
 
     @GetMapping("/posts/new")
@@ -58,7 +61,7 @@ class AdminController {
         var post = postService
                 .findPostById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with id " + postId + " not found"));
-        var postPayload = new PostPayload(post.title(), post.slug(), post.content());
+        var postPayload = new PostPayload(post.getTitle(), post.getSlug(), post.getContent());
         model.addAttribute("post", postPayload);
         model.addAttribute("postId", postId);
         return "blog/edit-post";
@@ -76,7 +79,7 @@ class AdminController {
             return "blog/edit-post";
         }
         var slug = postPayload.slug();
-        Optional<Post> postBySlug = postService.findPostBySlug(slug);
+        Optional<PostDto> postBySlug = postService.findPostBySlug(slug).map(blogMapper::toPostDto);
         if (postBySlug.isPresent() && !Objects.equals(postBySlug.get().id(), postId)) {
             model.addAttribute("post", postPayload);
             model.addAttribute("postId", postId);

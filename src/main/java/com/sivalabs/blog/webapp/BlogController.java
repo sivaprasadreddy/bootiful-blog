@@ -1,12 +1,14 @@
 package com.sivalabs.blog.webapp;
 
 import com.sivalabs.blog.domain.CreateCommentCmd;
-import com.sivalabs.blog.domain.PagedResult;
-import com.sivalabs.blog.domain.Post;
 import com.sivalabs.blog.domain.PostService;
 import com.sivalabs.blog.domain.ResourceNotFoundException;
+import com.sivalabs.blog.dtos.PagedResult;
+import com.sivalabs.blog.dtos.PostDto;
+import com.sivalabs.blog.mappers.BlogMapper;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/blog/posts")
 class BlogController {
     private final PostService postService;
+    private final BlogMapper blogMapper;
 
-    BlogController(PostService postService) {
+    BlogController(PostService postService, BlogMapper blogMapper) {
         this.postService = postService;
+        this.blogMapper = blogMapper;
     }
 
     @GetMapping("")
@@ -31,7 +35,8 @@ class BlogController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             Model model) {
-        PagedResult<Post> pagedResult = postService.searchPosts(query, page);
+        Page<PostDto> postDtoPage = postService.searchPosts(query, page).map(blogMapper::toPostDto);
+        PagedResult<PostDto> pagedResult = PagedResult.from(postDtoPage);
         model.addAttribute("postsResponse", pagedResult);
         String paginationRootUrl = "/blog/posts?";
         if (StringUtils.isNotBlank(query)) {
@@ -43,11 +48,12 @@ class BlogController {
 
     @GetMapping("/{slug}")
     String viewPostBySlug(@PathVariable(value = "slug") String slug, Model model) {
-        Post post = postService
+        PostDto postDto = postService
                 .findPostBySlug(slug)
+                .map(blogMapper::toPostDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
-        model.addAttribute("post", post);
-        model.addAttribute("comments", postService.getCommentsByPostId(post.id()));
+        model.addAttribute("post", postDto);
+        model.addAttribute("comments", postService.getCommentsByPostId(postDto.id()));
         model.addAttribute("comment", new CreateCommentPayload("", "", ""));
         return "blog/view-post";
     }
@@ -58,17 +64,18 @@ class BlogController {
             @Valid @ModelAttribute("comment") CreateCommentPayload comment,
             BindingResult result,
             Model model) {
-        Post post = postService
+        PostDto postDto = postService
                 .findPostBySlug(slug)
+                .map(blogMapper::toPostDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with slug '" + slug + "' not found"));
         if (result.hasErrors()) {
-            model.addAttribute("post", post);
+            model.addAttribute("post", postDto);
             model.addAttribute("comment", comment);
             return "blog/view-post";
         }
-        var cmd = new CreateCommentCmd(comment.name(), comment.email(), comment.content(), post.id());
+        var cmd = new CreateCommentCmd(comment.name(), comment.email(), comment.content(), postDto.id());
         postService.createComment(cmd);
-        return "redirect:/blog/posts/" + post.slug();
+        return "redirect:/blog/posts/" + postDto.slug();
     }
 
     public record CreateCommentPayload(String name, String email, String content) {}

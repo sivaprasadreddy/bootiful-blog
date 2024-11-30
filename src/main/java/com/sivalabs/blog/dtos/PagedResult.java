@@ -1,4 +1,4 @@
-package com.sivalabs.blog.domain;
+package com.sivalabs.blog.dtos;
 
 import java.util.List;
 import org.springframework.data.domain.Page;

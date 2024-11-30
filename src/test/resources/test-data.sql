@@ -2,9 +2,9 @@ delete from comments;
 delete from posts;
 delete from users;
 
-alter sequence users_id_seq restart with 101;
-alter sequence posts_id_seq restart with 101;
-alter sequence comments_id_seq restart with 101;
+alter sequence user_id_seq restart with 101;
+alter sequence post_id_seq restart with 101;
+alter sequence comment_id_seq restart with 101;
 
 insert into users(id, email, password, name, role, created_at) values
 (1,'admin@gmail.com','$2a$10$hKDVYxLefVHV/vtuPhWD3OigtRyOykRLDdUAp80Z1crSoS1lFqaFS','Administrator', 'ROLE_ADMIN', CURRENT_TIMESTAMP),
