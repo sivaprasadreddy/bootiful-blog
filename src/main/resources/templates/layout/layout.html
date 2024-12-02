@@ -36,7 +36,6 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-
             <a class="button is-primary" th:href="@{/login}"
                sec:authorize="isAnonymous()">
               Login
@@ -68,7 +67,8 @@
     </div>
   </div>
 </main>
-<th:block th:insert="~{footer-partial}"></th:block>
+
+<th:block th:insert="~{layout/footer}"></th:block>
 <script th:src="@{'/webjars/htmx.org/2.0.3/dist/htmx.min.js'}"></script>
 <script th:src="@{'/assets/js/admin.js'}"></script>
 <div layout:fragment="pageLevelScript">

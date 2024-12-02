@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Objects;
@@ -107,7 +108,14 @@ class PostRestController {
         postService.createComment(createdCommentCmd);
     }
 
-    public record CreateCommentPayload(String name, String email, String content) {}
+    public record CreateCommentPayload(
+            @NotEmpty(message = "Name is required")
+            String name,
+            @NotEmpty(message = "Email is required")
+            @Email(message = "Invalid email address")
+            String email,
+            @NotEmpty(message = "Content is required")
+            String content) {}
 
     @PostMapping("")
     @SecurityRequirement(name = "Bearer")

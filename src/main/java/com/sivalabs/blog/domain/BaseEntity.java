@@ -7,7 +7,7 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-class BaseEntity {
+public class BaseEntity {
 
     @Column(name = "created_at")
     protected LocalDateTime createdAt;

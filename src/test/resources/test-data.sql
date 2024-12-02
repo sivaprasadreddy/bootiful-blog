@@ -2,10 +2,6 @@ delete from comments;
 delete from posts;
 delete from users;
 
-alter sequence user_id_seq restart with 101;
-alter sequence post_id_seq restart with 101;
-alter sequence comment_id_seq restart with 101;
-
 insert into users(id, email, password, name, role, created_at) values
 (1,'admin@gmail.com','$2a$10$hKDVYxLefVHV/vtuPhWD3OigtRyOykRLDdUAp80Z1crSoS1lFqaFS','Administrator', 'ROLE_ADMIN', CURRENT_TIMESTAMP),
 (2,'siva@gmail.com','$2a$10$UFEPYW7Rx1qZqdHajzOnB.VBR3rvm7OI7uSix4RadfQiNhkZOi2fi','Siva Prasad', 'ROLE_USER', CURRENT_TIMESTAMP);
@@ -27,3 +23,7 @@ insert into comments(id, post_id, email, name, content, created_at, updated_at) 
 (2, 2, 'test@gmail.com', 'Test','sample comment 2', now(), null),
 (3, 2, 'test@gmail.com', 'Test','sample comment 3', now(), now())
 ;
+
+alter sequence user_id_seq restart with 101;
+alter sequence post_id_seq restart with 101;
+alter sequence comment_id_seq restart with 101;
