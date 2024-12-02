@@ -109,13 +109,9 @@ class PostRestController {
     }
 
     public record CreateCommentPayload(
-            @NotEmpty(message = "Name is required")
-            String name,
-            @NotEmpty(message = "Email is required")
-            @Email(message = "Invalid email address")
-            String email,
-            @NotEmpty(message = "Content is required")
-            String content) {}
+            @NotEmpty(message = "Name is required") String name,
+            @NotEmpty(message = "Email is required") @Email(message = "Invalid email address") String email,
+            @NotEmpty(message = "Content is required") String content) {}
 
     @PostMapping("")
     @SecurityRequirement(name = "Bearer")

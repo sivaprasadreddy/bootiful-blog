@@ -55,8 +55,7 @@ class LoginRestController {
     }
 
     public record LoginRequest(
-            @NotEmpty(message = "Email is required")
-            @Email(message = "Invalid email address") String email,
+            @NotEmpty(message = "Email is required") @Email(message = "Invalid email address") String email,
             @NotEmpty(message = "Password is required") String password) {}
 
     public record LoginResponse(String token, Instant expiresAt, String name, String email, String role) {}
