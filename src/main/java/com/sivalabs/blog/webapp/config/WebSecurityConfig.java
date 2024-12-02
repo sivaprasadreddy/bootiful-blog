@@ -1,4 +1,4 @@
-package com.sivalabs.blog.webapp;
+package com.sivalabs.blog.webapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

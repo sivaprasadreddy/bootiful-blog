@@ -1,6 +1,9 @@
 package com.sivalabs.blog.api;
 
 import com.sivalabs.blog.domain.*;
+import com.sivalabs.blog.domain.CreateCommentCmd;
+import com.sivalabs.blog.domain.CreatePostCmd;
+import com.sivalabs.blog.domain.UpdatePostCmd;
 import com.sivalabs.blog.dtos.CommentDto;
 import com.sivalabs.blog.dtos.PagedResult;
 import com.sivalabs.blog.dtos.PostDto;

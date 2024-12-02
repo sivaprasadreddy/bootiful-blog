@@ -4,8 +4,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-public class JwtUserContextUtils {
-    public static Long getCurrentUserIdOrThrow() {
+class JwtUserContextUtils {
+    static Long getCurrentUserIdOrThrow() {
         var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Jwt jwt) {
             Long userId = jwt.getClaim("user_id");

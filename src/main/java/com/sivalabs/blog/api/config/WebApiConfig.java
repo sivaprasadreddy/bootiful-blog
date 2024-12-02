@@ -1,4 +1,4 @@
-package com.sivalabs.blog.api;
+package com.sivalabs.blog.api.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;

@@ -8,11 +8,11 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtTokenHelper {
+class JwtTokenHelper {
     private final JwtEncoder encoder;
     private final JwtProperties jwtProperties;
 
-    public JwtTokenHelper(JwtEncoder encoder, JwtProperties jwtProperties) {
+    JwtTokenHelper(JwtEncoder encoder, JwtProperties jwtProperties) {
         this.encoder = encoder;
         this.jwtProperties = jwtProperties;
     }

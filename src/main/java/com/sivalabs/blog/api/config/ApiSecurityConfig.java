@@ -1,4 +1,4 @@
-package com.sivalabs.blog.api;
+package com.sivalabs.blog.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
 @EnableWebSecurity
-public class ApiSecurityConfig {
+class ApiSecurityConfig {
     private static final String[] PUBLIC_RESOURCES = {
         "/", "/favicon.ico", "/actuator/**", "/error", "/swagger-ui/**", "/v3/api-docs/**",
     };
