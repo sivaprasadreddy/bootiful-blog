@@ -1,17 +1,18 @@
-package com.sivalabs.blog.api.config;
+package com.sivalabs.blog.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-class WebApiConfig implements WebMvcConfigurer {
+class WebMvcConfig implements WebMvcConfigurer {
     private final CorsProperties corsProperties;
 
-    WebApiConfig(CorsProperties corsProperties) {
+    WebMvcConfig(CorsProperties corsProperties) {
         this.corsProperties = corsProperties;
     }
 
@@ -30,4 +31,10 @@ class WebApiConfig implements WebMvcConfigurer {
             @DefaultValue("*") String allowedOrigins,
             @DefaultValue("*") String allowedMethods,
             @DefaultValue("*") String allowedHeaders) {}
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+        registry.addRedirectViewController("/", "/blog/posts");
+    }
 }

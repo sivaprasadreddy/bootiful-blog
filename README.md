@@ -44,7 +44,7 @@ Run `src/main/java/com/sivalabs/blog/BlogApplication.java` from IDE.
 ./mvnw spring-boot:run
 ```
 
-* Application run on port http://localhost:8080
+* Application: http://localhost:8080
 * Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 ## Generating certs

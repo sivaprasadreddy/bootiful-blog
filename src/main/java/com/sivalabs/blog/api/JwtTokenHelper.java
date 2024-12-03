@@ -1,5 +1,6 @@
 package com.sivalabs.blog.api;
 
+import com.sivalabs.blog.ApplicationProperties;
 import com.sivalabs.blog.dtos.UserDto;
 import java.time.Instant;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -10,18 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 class JwtTokenHelper {
     private final JwtEncoder encoder;
-    private final JwtProperties jwtProperties;
+    private final ApplicationProperties properties;
 
-    JwtTokenHelper(JwtEncoder encoder, JwtProperties jwtProperties) {
+    JwtTokenHelper(JwtEncoder encoder, ApplicationProperties properties) {
         this.encoder = encoder;
-        this.jwtProperties = jwtProperties;
+        this.properties = properties;
     }
 
     public JwtToken generateToken(UserDto userDto) {
         Instant now = Instant.now();
-        Instant expiresAt = now.plusSeconds(jwtProperties.expiresInSeconds());
+        Instant expiresAt = now.plusSeconds(properties.jwt().expiresInSeconds());
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer(jwtProperties.issuer())
+                .issuer(properties.jwt().issuer())
                 .issuedAt(now)
                 .expiresAt(expiresAt)
                 .subject(userDto.email())

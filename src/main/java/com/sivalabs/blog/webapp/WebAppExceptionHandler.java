@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-@ControllerAdvice(basePackageClasses = GlobalWebAppExceptionHandler.class)
-class GlobalWebAppExceptionHandler {
+@ControllerAdvice(basePackageClasses = WebAppExceptionHandler.class)
+class WebAppExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     ModelAndView handle(ResourceNotFoundException e) {
