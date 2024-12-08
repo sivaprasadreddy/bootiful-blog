@@ -25,7 +25,7 @@
         <bulma.version>1.0.2</bulma.version>
         <htmx.version>2.0.3</htmx.version>
         <jquery.version>3.7.1</jquery.version>
-        <font-awesome.version>6.6.0</font-awesome.version>
+        <font-awesome.version>6.7.1</font-awesome.version>
         <dockerImageName>sivaprasadreddy/${project.artifactId}</dockerImageName>
     </properties>
 
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>io.github.wimdeblauwe</groupId>
             <artifactId>htmx-spring-boot-thymeleaf</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>

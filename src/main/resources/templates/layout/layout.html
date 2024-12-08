@@ -9,8 +9,8 @@
   <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE" th:text="#{app.title}">Bootiful Blog</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
   <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-  <link rel="stylesheet" th:href="@{/webjars/bulma/1.0.2/css/bulma.min.css}">
-  <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.6.0/css/all.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/bulma/css/bulma.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
   <link rel="stylesheet" th:href="@{/assets/css/styles.css}"/>
 </head>
 
@@ -69,7 +69,7 @@
 </main>
 
 <th:block th:insert="~{layout/footer}"></th:block>
-<script th:src="@{'/webjars/htmx.org/2.0.3/dist/htmx.min.js'}"></script>
+<script th:src="@{'/webjars/htmx.org/dist/htmx.min.js'}"></script>
 <script th:src="@{'/assets/js/admin.js'}"></script>
 <div layout:fragment="pageLevelScript">
 </div>
