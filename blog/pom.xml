@@ -26,6 +26,9 @@
         <htmx.version>2.0.3</htmx.version>
         <jquery.version>3.7.1</jquery.version>
         <font-awesome.version>6.7.1</font-awesome.version>
+        <node.version>v20.17.0</node.version>
+        <npm.version>10.8.2</npm.version>
+        <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
         <dockerImageName>sivaprasadreddy/bootiful-blog</dockerImageName>
     </properties>
 
@@ -259,6 +262,80 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>angular-ui</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <frontend-directory>blog-angular</frontend-directory>
+                <frontend-directory-path>../${frontend-directory}</frontend-directory-path>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend-maven-plugin.version}</version>
+                        <configuration>
+                            <workingDirectory>${frontend-directory-path}</workingDirectory>
+                            <installDirectory>target</installDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <npmVersion>${npm.version}</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install --force</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run build</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run build</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <copy todir="${project.build.directory}/classes/public">
+                                            <fileset dir="${frontend-directory-path}/dist/${frontend-directory}/browser"/>
+                                        </copy>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>

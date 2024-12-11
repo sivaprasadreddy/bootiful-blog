@@ -1,12 +1,17 @@
 package com.sivalabs.blog.config;
 
+import java.io.IOException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 class WebMvcConfig implements WebMvcConfigurer {
@@ -22,6 +27,23 @@ class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns(corsProperties.allowedOrigins())
                 .allowedMethods(corsProperties.allowedMethods())
                 .allowedHeaders(corsProperties.allowedHeaders());
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/public/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+
+                        return requestedResource.exists() && requestedResource.isReadable()
+                                ? requestedResource
+                                : new ClassPathResource("/public/index.html");
+                    }
+                });
     }
 
     @ConfigurationProperties(prefix = "blog.cors")

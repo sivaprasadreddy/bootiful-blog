@@ -1,0 +1,43 @@
+<div class="row">
+
+  <div class="col-md-6 offset-3">
+    <div class="card">
+      <div class="card-header text-center">
+        <h3 >Login Form</h3>
+      </div>
+      <div class="card-body">
+        <div *ngIf="error">
+          <div class="alert alert-danger">Invalid Email and Password.</div>
+        </div>
+        <form [formGroup]="registrationForm" id="loginForm" method="post" (ngSubmit)="register()">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email*</label>
+            <input type="text" id="email" name="email"
+                   required
+                   formControlName="email"
+                   class="form-control" placeholder="Email" />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password*</label>
+            <input type="password" id="password" name="password"
+                   required
+                   formControlName="password"
+                   class="form-control" placeholder="Password" />
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name*</label>
+            <input type="text" id="name" name="name"
+                   required
+                   formControlName="name"
+                   class="form-control" placeholder="Enter name" />
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary"
+                    [ngClass]="{'disabled': registrationForm.invalid}">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
