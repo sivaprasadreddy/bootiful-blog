@@ -1,11 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
 body {
-  background-color: #FBFBFB;
-}
-#app {
-  margin-top: 70px;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-a:link {
-  text-decoration: none;
+#wrapper {
+  flex: 1;
+}
+
+footer {
+  padding: 1rem 1rem 1rem !important;
+}
+
+main {
+  padding-top: 70px;
+  padding-bottom: 10px;
 }

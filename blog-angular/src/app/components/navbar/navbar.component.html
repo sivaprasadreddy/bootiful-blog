@@ -1,36 +1,39 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-  <div class="container">
-    <a class="navbar-brand" href="#" routerLink="/">SivaLabs Blog</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!--<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/home">Home</a>
-          </li>
-      </ul>-->
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="nav-link" routerLink="/login"> Login </a>
-        </li>
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a class="nav-link" routerLink="/register"> Registration </a>
-        </li>
-        <li class="nav-item" *ngIf="isLoggedIn()">
-          <span class="nav-link">Welcome {{loginUserName()}}</span>
-        </li>
-        <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link" href="#" routerLink="/posts/new">
-            <i class="fas fa-plus-circle" ></i> Add
-          </a>
-        </li>
-        <li class="nav-item" *ngIf="isLoggedIn()">
-          <a class="nav-link" href="#" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout </a>
-        </li>
-      </ul>
+<header>
+  <nav class="navbar is-primary is-fixed-top" role="navigation"
+       aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#" routerLink="/">
+              <span class="is-size-3 has-text-weight-bold">Bootiful Blog</span>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+         data-target="navbarMain">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-  </div>
-</nav>
+
+    <div id="navbarMain" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary" routerLink="/login"
+               *ngIf="!isLoggedIn()">
+              Login
+            </a>
+            <a class="button is-primary" href="#" routerLink="/posts/new"
+               *ngIf="isLoggedIn()">
+              New Post
+            </a>
+            <a class="button is-primary" href="#" (click)="logout()"
+               *ngIf="isLoggedIn()">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
