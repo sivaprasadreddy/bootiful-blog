@@ -22,11 +22,11 @@ tasks:
 
   build_image:
     cmds:
-      - "{{.MVNW}} clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
+      - "{{.MVNW}} -pl blog clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
 
   build_native_image:
     cmds:
-      - "{{.MVNW}} -Pnative clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
+      - "{{.MVNW}} pl blog -Pnative clean compile spring-boot:build-image -DskipTests -DdockerImageName={{.IMAGE_NAME}}"
 
   start:
     deps: [ build_image ]

@@ -8,11 +8,13 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.sivalabs.blog.AbstractIT;
 import com.sivalabs.blog.api.LoginRestController.LoginRequest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class LoginRestControllerTests extends AbstractIT {
 
     @Test
+    @DisplayName("Given valid credentials, user should be able to login successfully")
     void shouldLoginSuccessfully() {
         var payload = new LoginRequest("siva@gmail.com", "siva");
         given().contentType("application/json")

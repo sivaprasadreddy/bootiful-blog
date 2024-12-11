@@ -29,7 +29,7 @@ $ docker compose version
 ```shell
 # Clone the repository
 $ git clone https://github.com/sivaprasadreddy/bootiful-blog.git
-$ cd bootiful-blog
+$ cd bootiful-blog/blog
 
 # Run tests
 $ ./mvnw test

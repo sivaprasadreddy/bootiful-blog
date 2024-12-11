@@ -59,6 +59,7 @@ class PostRestControllerTests extends AbstractIT {
                 restTemplate.getForEntity("/api/posts/{slug}", PostDto.class, "introducing-springboot");
         assertThat(response.getStatusCode()).isEqualTo(OK);
         PostDto postDto = response.getBody();
+        assertThat(postDto).isNotNull();
         assertThat(postDto.id()).isEqualTo(2);
         assertThat(postDto.title()).isEqualTo("SpringBoot: Introducing SpringBoot");
         assertThat(postDto.slug()).isEqualTo("introducing-springboot");
@@ -99,6 +100,7 @@ class PostRestControllerTests extends AbstractIT {
 
         assertThat(response.getStatusCode()).isEqualTo(CREATED);
         URI location = response.getHeaders().getLocation();
+        assertThat(location).isNotNull();
         assertThat(location.toString()).endsWith("/api/posts/post-slug");
     }
 
@@ -124,6 +126,7 @@ class PostRestControllerTests extends AbstractIT {
 
         assertThat(response.getStatusCode()).isEqualTo(OK);
         URI location = response.getHeaders().getLocation();
+        assertThat(location).isNotNull();
         assertThat(location.toString()).endsWith("/api/posts/installing-linuxmint-os");
     }
 

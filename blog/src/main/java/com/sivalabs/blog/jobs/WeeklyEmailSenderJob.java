@@ -13,13 +13,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 class WeeklyEmailSenderJob {
-
     private static final Logger log = LoggerFactory.getLogger(WeeklyEmailSenderJob.class);
     private final PostService postService;
     private final UserService userService;
     private final EmailService emailService;
 
-    public WeeklyEmailSenderJob(PostService postServiceImpl, UserService userService, EmailService emailService) {
+    WeeklyEmailSenderJob(PostService postServiceImpl, UserService userService, EmailService emailService) {
         this.postService = postServiceImpl;
         this.userService = userService;
         this.emailService = emailService;
