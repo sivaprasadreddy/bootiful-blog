@@ -48,3 +48,9 @@ export interface User {
   email: string
   role: string
 }
+
+export interface UpdatePostPayload {
+  title: string
+  slug: string
+  content: string
+}

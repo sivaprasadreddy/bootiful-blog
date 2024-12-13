@@ -7,16 +7,15 @@ import {AuthService} from '../../services/auth.service';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'post',
+  selector: 'edit-post',
   standalone: true,
-  templateUrl: './post.component.html',
+  templateUrl: './edit-post.component.html',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterLink
   ],
 })
-export class PostComponent implements OnInit {
+export class EditPostComponent implements OnInit {
   slug = ""
   post: PostUserView = {
       id: 0,
@@ -34,6 +33,12 @@ export class PostComponent implements OnInit {
               private authService: AuthService) {
   }
 
+  editPostForm = this.fb.group({
+    title: ['', [Validators.required, Validators.pattern(/\S/)]],
+    slug: ['', [Validators.required, Validators.pattern(/\S/)]],
+    content: ['', [Validators.required, Validators.pattern(/\S/)]],
+  });
+
   ngOnInit(): void {
     this.route.paramMap
       .subscribe(params => {
@@ -47,6 +52,20 @@ export class PostComponent implements OnInit {
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
+  }
+
+  updatePost() {
+    console.log(this.editPostForm.value)
+    this.postService.updatePost(
+      this.slug,
+      {
+      title: this.editPostForm.value.title!,
+      slug: this.editPostForm.value.slug!,
+      content: this.editPostForm.value.content!,
+    }).subscribe(response => {
+      //console.log('update post response:',response)
+      this.router.navigate(['/posts', this.editPostForm.value.slug!])
+    })
   }
 
   fetchPost() {

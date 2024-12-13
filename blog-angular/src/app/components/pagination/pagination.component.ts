@@ -10,7 +10,6 @@ import {NgClass, NgIf} from "@angular/common";
   imports: [
     RouterLink,
     NgClass,
-    NgIf
   ],
 })
 export class PaginationComponent {
