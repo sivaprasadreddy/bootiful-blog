@@ -35,7 +35,8 @@
 
       <div class="field is-grouped">
         <div class="control">
-          <button type="submit" class="button is-primary">Save</button>
+          <button type="submit" class="button is-primary"
+                  [disabled]="newPostForm.invalid">Save</button>
         </div>
       </div>
     </form>

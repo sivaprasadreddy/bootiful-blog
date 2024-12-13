@@ -22,8 +22,8 @@ export class NewPostComponent implements OnInit {
       title: '',
       content: '',
       createdByUserName: '',
-      editable: false,
       createdAt: new Date(),
+      comments: []
     }
   private fb = inject(FormBuilder);
   constructor(private router: Router,

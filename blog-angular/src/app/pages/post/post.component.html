@@ -28,4 +28,54 @@
     <div class="pt-2 pb-2">{{post.content}}</div>
   </div>
   <hr/>
+  <div>
+    <h3 class="is-size-3">Comments:</h3>
+
+    <form class="box " id="commentForm" method="post"
+          [formGroup]="commentForm"
+          (ngSubmit)="createComment()">
+      <div class="field">
+        <label for="name" class="label">Name</label>
+        <div class="control">
+          <input type="text" class="input" id="name"
+                 placeholder="Enter Name" name="name"
+                 formControlName="name"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="email" class="label">Email</label>
+        <div class="control">
+          <input type="email" class="input" id="email"
+                 placeholder="Enter email" name="email"
+                 formControlName="email"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="content" class="label">Comment</label>
+        <div class="control">
+						<textarea class="textarea" id="content"
+                      placeholder="Enter comment" rows="8" name="content"
+                      formControlName="content"></textarea>
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button is-primary"
+                  [disabled]="commentForm.invalid">Submit</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="box" *ngIf="post.comments.length == 0">
+      <p class="is-size-2">No comments yet!</p>
+    </div>
+    <div class="box" *ngFor="let comment of post.comments">
+      <div>
+        <p><b>Name : </b><strong>{{comment.name}}</strong></p>
+        <p><b>Date: </b><span>{{comment.createdAt | date}}</span></p>
+        <p class="pt-1">{{comment.content}}</p>
+      </div>
+    </div>
+  </div>
 </div>

@@ -13,10 +13,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.component').then(mod => mod.LoginComponent)
   },
   {
-    path: 'register',
-    loadComponent: () => import('./pages/register/register.component').then(mod => mod.RegisterComponent)
-  },
-  {
     path: 'posts',
     loadComponent: () => import('./pages/posts/posts.component').then(mod => mod.PostsComponent)
   },

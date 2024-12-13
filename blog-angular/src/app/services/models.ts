@@ -38,7 +38,15 @@ export interface PostUserView {
   content: string
   createdByUserName: string
   createdAt: Date
-  editable: boolean
+  comments: Comment[]
+}
+
+export interface Comment {
+  id: number
+  name: string
+  email: string
+  content: string
+  createdAt: Date
 }
 
 
@@ -58,5 +66,11 @@ export interface CreatePostPayload {
 export interface UpdatePostPayload {
   title: string
   slug: string
+  content: string
+}
+
+export interface CreateCommentPayload {
+  name: string
+  email: string
   content: string
 }
