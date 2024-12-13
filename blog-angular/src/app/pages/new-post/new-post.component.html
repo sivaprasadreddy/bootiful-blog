@@ -1,10 +1,10 @@
 <div class="container">
   <div>
-    <p class="is-size-1">Edit Post</p>
+    <p class="is-size-1">New Post</p>
     <form class="box" method="post"
           id="editPostForm"
-          [formGroup]="editPostForm"
-          (ngSubmit)="updatePost()">
+          [formGroup]="newPostForm"
+          (ngSubmit)="createPost()">
       <div class="field">
         <label for="title" class="label">Title</label>
         <div class="control">

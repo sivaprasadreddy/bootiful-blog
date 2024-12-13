@@ -49,6 +49,12 @@ export interface User {
   role: string
 }
 
+export interface CreatePostPayload {
+  title: string
+  slug: string
+  content: string
+}
+
 export interface UpdatePostPayload {
   title: string
   slug: string

@@ -1,20 +1,20 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {PostService} from "../../services/post.service";
 import {CommonModule} from "@angular/common";
 import {PostUserView} from '../../services/models';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'edit-post',
+  selector: 'new-post',
   standalone: true,
-  templateUrl: './edit-post.component.html',
+  templateUrl: './new-post.component.html',
   imports: [
     CommonModule,
     ReactiveFormsModule,
   ],
 })
-export class EditPostComponent implements OnInit {
+export class NewPostComponent implements OnInit {
   slug = ""
   post: PostUserView = {
       id: 0,
@@ -26,38 +26,30 @@ export class EditPostComponent implements OnInit {
       createdAt: new Date(),
     }
   private fb = inject(FormBuilder);
-  constructor(private route: ActivatedRoute,
-              private router: Router,
+  constructor(private router: Router,
               private postService: PostService) {
   }
 
-  editPostForm = this.fb.group({
+  newPostForm = this.fb.group({
     title: ['', [Validators.required, Validators.pattern(/\S/)]],
     slug: ['', [Validators.required, Validators.pattern(/\S/)]],
     content: ['', [Validators.required, Validators.pattern(/\S/)]],
   });
 
   ngOnInit(): void {
-    this.route.paramMap
-      .subscribe(params => {
-          this.slug = params.get('slug') || "";
-          if (this.slug) {
-            this.fetchPost()
-          }
-        }
-      );
+
   }
 
-  updatePost() {
-    console.log(this.editPostForm.value)
-    this.postService.updatePost(
-      this.slug,
+  createPost() {
+    console.log(this.newPostForm.value)
+    this.postService.createPost(
       {
-      title: this.editPostForm.value.title!,
-      slug: this.editPostForm.value.slug!,
-      content: this.editPostForm.value.content!,
+      title: this.newPostForm.value.title!,
+      slug: this.newPostForm.value.slug!,
+      content: this.newPostForm.value.content!,
     }).subscribe(response => {
-      this.router.navigate(['/posts', this.editPostForm.value.slug!])
+      //console.log('update post response:',response)
+      this.router.navigate(['/posts'])
     })
   }
 
@@ -65,11 +57,6 @@ export class EditPostComponent implements OnInit {
     this.postService.getPost(this.slug).subscribe(response => {
       console.log(response)
       this.post = response;
-      this.editPostForm.setValue({
-        title: this.post.title,
-        slug: this.post.slug,
-        content: this.post.content,
-      })
     })
   }
 }

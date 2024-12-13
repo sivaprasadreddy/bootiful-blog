@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { environment } from "../../environments/environment"
-import {PostsResponse, PostUserView, UpdatePostPayload} from './models';
+import {CreatePostPayload, PostsResponse, PostUserView, UpdatePostPayload} from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,12 @@ export class PostService {
     let url = `${this.apiBaseUrl}/api/posts/${slug}`;
     return this.http.get<PostUserView>(`${url}`);
   }
+
+  createPost(payload: CreatePostPayload) {
+    let url = `${this.apiBaseUrl}/api/posts`;
+    return this.http.post<PostUserView>(`${url}`, payload);
+  }
+
   updatePost(slug: string, payload: UpdatePostPayload) {
     let url = `${this.apiBaseUrl}/api/posts/${slug}`;
     return this.http.put<PostUserView>(`${url}`, payload);
