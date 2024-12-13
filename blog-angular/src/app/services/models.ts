@@ -25,20 +25,18 @@ export interface CreateUserResponse {
 export interface PostsResponse {
   data: PostUserView[],
   totalElements: number
-  pageNumber: number
+  currentPageNo: number
   totalPages: number
-  isFirst: boolean
-  isLast: boolean
-  hasNext: boolean
-  hasPrevious: boolean
+  hasNextPage: boolean
+  hasPreviousPage: boolean
 }
 
 export interface PostUserView {
   id: number
   title: string
-  url: string
+  slug: string
   content: string
-  createdBy: User
+  createdByUserName: string
   createdAt: Date
   editable: boolean
 }

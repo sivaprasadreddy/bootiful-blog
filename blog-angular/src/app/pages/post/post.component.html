@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="pt-3 pb-1 content">
+    <h2 class="title">{{post.title}}</h2>
+    <div class="content pt-1">
+      <div class="pb-1">
+				<span class="pr-1">
+				<i class="fa fa-user"></i> <strong>{{post.createdByUserName}}</strong>
+				</span>
+        <span class="pr-1">
+				<i class="fa fa-calendar"></i> <strong>{{post.createdAt | date}}</strong>
+				</span>
+      </div>
+      <!--<th:block th:insert="~{blog/post-actions-partial}"></th:block>-->
+    </div>
+    <div class="pt-2 pb-2">{{post.content}}</div>
+  </div>
+  <hr/>
+</div>

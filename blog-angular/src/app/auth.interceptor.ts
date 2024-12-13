@@ -6,7 +6,6 @@ import {Router} from "@angular/router";
 import {AuthService} from "./services/auth.service";
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
-  // Inject the current `AuthService` and use it to get an authentication token:
   const authService = inject(AuthService);
   const router = inject(Router);
   let skipInterceptor = false;
@@ -18,15 +17,13 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
       skipInterceptor = true;
     }
   });
-  console.log("skipInterceptor:", skipInterceptor)
   let token = authService.getAuthToken();
-  console.log("token:", token)
   if (token && !skipInterceptor) {
     const tokenizedReq = req.clone({
       headers: req.headers.set('Authorization', 'Bearer ' + token)
     });
     return next(tokenizedReq).pipe(tap({
-      next: (event) => console.log('succeeded. event:', event),
+      //next: (event) => console.log('succeeded. event:', event),
       error: (err: any) => {
         console.log("Error:", err);
         if (err instanceof HttpErrorResponse) {

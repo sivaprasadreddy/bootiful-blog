@@ -15,13 +15,14 @@ import {NgClass, NgIf} from "@angular/common";
 })
 export class PaginationComponent {
   @Input()
+  query = ""
+
+  @Input()
   postsResponse : PostsResponse = {
     data: [],
-    isFirst: false,
-    hasNext: false,
-    hasPrevious: false,
-    isLast: false,
-    pageNumber: 0,
+    hasNextPage: false,
+    hasPreviousPage: false,
+    currentPageNo: 0,
     totalElements: 0,
     totalPages: 0
   }

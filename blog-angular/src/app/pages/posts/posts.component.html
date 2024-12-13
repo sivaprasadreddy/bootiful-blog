@@ -1,3 +1,46 @@
 <div class="container">
-  <h2 class="text-center">Welcome to Blog</h2>
+  <div class="pt-2 pb-2">
+    <form [formGroup]="searchForm" id="searchForm" method="get" (ngSubmit)="search()">
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="query" placeholder="Search"
+                 formControlName="query">
+        </div>
+        <div class="control">
+          <button class="button is-primary">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="fixed-grid has-1-cols">
+    <div class="grid">
+      <div class="cell" *ngFor="let post of posts.data">
+        <div class="card">
+          <div class="card-content">
+            <a class="title pt-1" href="/posts/{{post.slug}}">
+              {{post.title}}
+            </a>
+            <div class="content pt-3">
+              <div class="pb-1">
+                <span class="pr-2">
+                  <i class="fa fa-user"></i>&nbsp;
+                  <strong>{{post.createdByUserName}}</strong></span>
+                <span class="pr-1">
+                  <i class="fa fa-calendar"></i>&nbsp;
+                  <strong>{{post.createdAt | date}}</strong>
+                </span>
+
+              </div>
+              <p>{{post.content}}</p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-pagination [postsResponse]="posts" [query]="searchForm.value.query || ''"></app-pagination>
 </div>

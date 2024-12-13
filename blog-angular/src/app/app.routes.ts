@@ -20,6 +20,10 @@ export const routes: Routes = [
     path: 'posts',
     loadComponent: () => import('./pages/posts/posts.component').then(mod => mod.PostsComponent)
   },
+  {
+    path: 'posts/:slug',
+    loadComponent: () => import('./pages/post/post.component').then(mod => mod.PostComponent)
+  },
 
 
   {path: '**', component: PageNotFoundComponent},
