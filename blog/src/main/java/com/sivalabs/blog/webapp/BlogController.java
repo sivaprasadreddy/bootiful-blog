@@ -1,6 +1,7 @@
 package com.sivalabs.blog.webapp;
 
 import com.sivalabs.blog.domain.CreateCommentCmd;
+import com.sivalabs.blog.domain.PostProjection;
 import com.sivalabs.blog.domain.PostService;
 import com.sivalabs.blog.domain.ResourceNotFoundException;
 import com.sivalabs.blog.dtos.PagedResult;
@@ -35,7 +36,13 @@ class BlogController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             Model model) {
-        Page<PostDto> postDtoPage = postService.searchPosts(query, page).map(blogMapper::toPostDto);
+        Page<PostProjection> posts;
+        if (StringUtils.isNotBlank(query)) {
+            posts = postService.findPosts(page);
+        } else {
+            posts = postService.searchPosts(query, page);
+        }
+        Page<PostDto> postDtoPage = posts.map(blogMapper::toPostDto);
         PagedResult<PostDto> pagedResult = PagedResult.from(postDtoPage);
         model.addAttribute("postsResponse", pagedResult);
         String paginationRootUrl = "/blog/posts?";
